@@ -1,5 +1,5 @@
 # Enforce semantic pull request titles
-# Example: "feat(api): [UNITY-1234] Add new user authentication endpoint"
+# Example: "feature(api): [UNITY-1234] Add new user authentication endpoint"
 titleOnly: true
 
 # Validate PR title against the following types
@@ -21,7 +21,7 @@ types:
 requireScope: true
 
 # Allow only lowercase letters in type and scope
-# Example: "feat(api)" is valid, but "Feat(API)" is not
+# Example: "feature(api)" is valid, but "Feat(API)" is not
 caseInsensitiveTypes: false
 
 # Require a ticket number in the PR title
@@ -53,6 +53,6 @@ ignoreBranches:
 # Custom error messages
 errorMessages:
   invalidTitle: 'PR title must follow the format: type(scope): [UNITY-XXXX] Description'
-  invalidType: 'Type must be one of the allowed types (e.g., feat, fix, docs)'
-  missingScope: 'A scope is required in the PR title (e.g., feat(api):)'
+  invalidType: 'Type must be one of the allowed types (e.g., feature, fix, docs)'
+  missingScope: 'A scope is required in the PR title (e.g., feature(api):)'
   missingTicket: 'A UNITY ticket number is required in the PR title (e.g., [UNITY-1234])'
