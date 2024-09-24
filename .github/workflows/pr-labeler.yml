@@ -1,0 +1,73 @@
+name: Unity SDK Pull Request Labeling
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          configuration-path: .github/labeler.yml
+
+  size-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: size-label
+        uses: "pascalgn/size-label-action@v0.5.4"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          sizes: >
+            {
+              "10": "XS",
+              "100": "S",
+              "250": "M",
+              "500": "L",
+              "1000": "XL",
+              "2000": "XXL"
+            }
+
+  unity-specific-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Label Unity-specific changes
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            function hasUnityChanges(files, directory) {
+              return files.some(file => file.startsWith(directory));
+            }
+
+            const { data: changedFiles } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const filePaths = changedFiles.map(file => file.filename);
+
+            const labelsToAdd = [];
+
+            if (hasUnityChanges(filePaths, 'Assets/')) labelsToAdd.push('unity-assets');
+            if (hasUnityChanges(filePaths, 'ProjectSettings/')) labelsToAdd.push('unity-settings');
+            if (hasUnityChanges(filePaths, 'Packages/')) labelsToAdd.push('unity-packages');
+            if (hasUnityChanges(filePaths, 'Assets/Convai/Editor/')) labelsToAdd.push('unity-editor');
+            if (hasUnityChanges(filePaths, 'Assets/Convai/Plugins/')) labelsToAdd.push('unity-plugins');
+
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labelsToAdd
+              });
+            }
