@@ -1,10 +1,10 @@
 # Enforce semantic pull request titles
-# Example: "feature(api): [UNITY-1234] Add new user authentication endpoint"
+# Example: "feat(api): [UNITY-1234] Add new user authentication endpoint"
 titleOnly: true
 
 # Validate PR title against the following types
 types:
-  - feature  # Example: "feature(ui): [UNITY-1235] Implement new Editor layout"
+  - feat  # Example: "feat(ui): [UNITY-1235] Implement new Editor layout"
   - fix      # Example: "fix(database): [UNITY-1236] Resolve user data query issue"
   - docs     # Example: "docs(readme): [UNITY-1237] Update installation instructions"
   - style    # Example: "style(css): [UNITY-1238] Standardize button styles across the editor config window"
@@ -17,15 +17,15 @@ types:
   - revert   # Example: "revert: [UNITY-1245] Revert 'Add new feature X' due to stability issues"
 
 # Require a scope to be provided
-# Example: feature(api): [UNITY-1246] Add new endpoint for user preferences
+# Example: feat(api): [UNITY-1246] Add new endpoint for user preferences
 requireScope: true
 
 # Allow only lowercase letters in type and scope
-# Example: "feature(api)" is valid, but "Feat(API)" is not
+# Example: "feat(api)" is valid, but "Feat(API)" is not
 caseInsensitiveTypes: false
 
 # Require a ticket number in the PR title
-# Example: "feature(auth): [UNITY-1247] Implement two-factor authentication"
+# Example: "feat(auth): [UNITY-1247] Implement two-factor authentication"
 titleRegex: '^\s*(?<type>\w+)(?:\((?<scope>\w+)\))?\s*:\s*(?<ticket>\[UNITY-\d+\])\s+(?<description>.+)$'
 
 # Validate all commits in addition to the PR title
@@ -54,5 +54,5 @@ ignoreBranches:
 errorMessages:
   invalidTitle: 'PR title must follow the format: type(scope): [UNITY-XXXX] Description'
   invalidType: 'Type must be one of the allowed types (e.g., feature, fix, docs)'
-  missingScope: 'A scope is required in the PR title (e.g., feature(api):)'
+  missingScope: 'A scope is required in the PR title (e.g., feat(api):)'
   missingTicket: 'A UNITY ticket number is required in the PR title (e.g., [UNITY-1234])'
