@@ -7,14 +7,21 @@ on:
 jobs:
   triage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - uses: actions/labeler@v3
+      - uses: actions/labeler@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           configuration-path: .github/labeler.yml
+          sync-labels: false
 
   size-label:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: size-label
         uses: "pascalgn/size-label-action@v0.4.3"
@@ -33,8 +40,11 @@ jobs:
 
   unity-specific-labels:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Label Unity-specific changes
         uses: actions/github-script@v6
         with:
