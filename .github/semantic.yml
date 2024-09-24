@@ -4,17 +4,17 @@ titleOnly: true
 
 # Validate PR title against the following types
 types:
-  - feat  # Example: "feat(ui): [UNITY-1235] Implement new Editor layout"
-  - fix      # Example: "fix(database): [UNITY-1236] Resolve user data query issue"
-  - docs     # Example: "docs(readme): [UNITY-1237] Update installation instructions"
-  - style    # Example: "style(css): [UNITY-1238] Standardize button styles across the editor config window"
-  - refactor # Example: "refactor(auth): [UNITY-1239] Simplify character importer process"
-  - perf     # Example: "perf(queries): [UNITY-1240] Optimize database indexing for faster searches"
-  - test     # Example: "test(api): [UNITY-1241] Add unit tests for API add work flow"
-  - build    # Example: "build(deps): [UNITY-1242] Upgrade Unity to version to Unity 6"
-  - ci       # Example: "ci(github-actions): [UNITY-1243] Add automated code linting"
-  - chore    # Example: "chore(deps): [UNITY-1244] Improve character importer RPM dependencies"
-  - revert   # Example: "revert: [UNITY-1245] Revert 'Add new feature X' due to stability issues"
+  - feat     # "feat(ui): [UNITY-1235] Implement new Editor layout"
+  - fix      # "fix(database): [UNITY-1236] Resolve user data query issue"
+  - docs     # "docs(readme): [UNITY-1237] Update installation instructions"
+  - style    # "style(css): [UNITY-1238] Standardize button styles across the editor config window"
+  - refactor # "refactor(auth): [UNITY-1239] Simplify character importer process"
+  - perf     # "perf(queries): [UNITY-1240] Optimize database indexing for faster searches"
+  - test     # "test(api): [UNITY-1241] Add unit tests for API add work flow"
+  - build    # "build(deps): [UNITY-1242] Upgrade Unity to version to Unity 6"
+  - ci       # "ci(github-actions): [UNITY-1243] Add automated code linting"
+  - chore    # "chore(deps): [UNITY-1244] Improve character importer RPM dependencies"
+  - revert   # "revert: [UNITY-1245] Revert 'Add new feature X' due to stability issues"
 
 # Require a scope to be provided
 # Example: feat(api): [UNITY-1246] Add new endpoint for user preferences
@@ -26,7 +26,14 @@ caseInsensitiveTypes: false
 
 # Require a ticket number in the PR title
 # Example: "feat(auth): [UNITY-1247] Implement two-factor authentication"
-titleRegex: '^\s*(?<type>\w+)(?:\((?<scope>\w+)\))?\s*:\s*(?<ticket>\[UNITY-\d+\])\s+(?<description>.+)$'
+titleRegex: '^\s*(?<type>\w+)\((?<scope>\w+)\):\s*(?<ticket>\[UNITY-\d+\])\s+(?<description>.+)$'
+
+# Enforce the semantic PR title as a required check
+# This will prevent merging if the title doesn't match the required format
+enforceForPullRequest: true
+
+# Fail the status if the title doesn't conform to the regex
+matchTitle: true
 
 # Validate all commits in addition to the PR title
 # Ensures that each commit message follows the semantic format
@@ -53,6 +60,6 @@ ignoreBranches:
 # Custom error messages
 errorMessages:
   invalidTitle: 'PR title must follow the format: type(scope): [UNITY-XXXX] Description'
-  invalidType: 'Type must be one of the allowed types (e.g., feature, fix, docs)'
+  invalidType: 'Type must be one of the allowed types (e.g., feat, fix, docs)'
   missingScope: 'A scope is required in the PR title (e.g., feat(api):)'
   missingTicket: 'A UNITY ticket number is required in the PR title (e.g., [UNITY-1234])'
