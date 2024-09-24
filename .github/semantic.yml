@@ -1,5 +1,5 @@
 # Enforce semantic pull request titles
-# Example: "feat(api): [UNITY-1234] Add new user authentication endpoint"
+# Example: "feat(api): [UNITY-1235] Add new user authentication endpoint"
 titleOnly: true
 
 # Validate PR title against the following types
