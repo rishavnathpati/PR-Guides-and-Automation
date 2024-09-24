@@ -1,11 +1,46 @@
-name: Unity SDK Pull Request Labeling
+name: Enforce Semantic Pull Request Titles
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR Title Format
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = context.payload.pull_request.title;
+            const allowedTypes = ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'chore', 'revert'];
+            const regex = /^\s*(?<type>\w+)\((?<scope>\w+)\):\s*(?<ticket>\[UNITY-\d+\])\s+(?<description>.+)$/;
+            const match = regex.exec(title);
+
+            if (!match) {
+              throw new Error('PR title must follow the format: type(scope): [UNITY-XXXX] Description');
+            }
+
+            const { type, scope, ticket } = match.groups;
+
+            // Check if type is valid
+            if (!allowedTypes.includes(type)) {
+              throw new Error(`Type "${type}" is not one of the allowed types (e.g., feat, fix, docs).`);
+            }
+
+            // Check if scope is present (required by configuration)
+            if (!scope) {
+              throw new Error('A scope is required in the PR title (e.g., feat(api):).');
+            }
+
+            // Check if ticket number is present
+            if (!ticket || !/^\[UNITY-\d+\]$/.test(ticket)) {
+              throw new Error('A UNITY ticket number is required in the PR title (e.g., [UNITY-1234]).');
+            }
+
   triage:
+    needs: validate-pr-title
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -18,6 +53,7 @@ jobs:
           sync-labels: false
 
   size-label:
+    needs: validate-pr-title
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,6 +74,7 @@ jobs:
             }
 
   unity-specific-labels:
+    needs: validate-pr-title
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -47,7 +84,7 @@ jobs:
       - name: Label Unity-specific changes
         uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data: changedFiles } = await github.rest.pulls.listFiles({
               ...context.repo,
