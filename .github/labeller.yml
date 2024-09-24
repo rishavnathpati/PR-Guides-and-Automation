@@ -1,0 +1,42 @@
+ci/cd:
+  - .github/**
+
+documentation:
+  - README.md
+  - docs/**
+  - ./*.md
+
+core:
+  - Assets/Convai/Plugins**
+  - Runtime/**
+
+speech:
+  - Assets/Convai/Scripts/Runtime/**
+
+character:
+  - Assets/Convai/Scripts/Character/**
+
+actions:
+  - Assets/Convai/Scripts/Actions/**
+
+lipsync:
+  - Assets/Convai/Scripts/Lipsync/**
+
+examples:
+  - Assets/Convai/Examples/**
+
+tests:
+  - Assets/Tests/**
+
+editor:
+  - Editor/**
+
+plugins:
+  - Plugins/**
+
+third-party:
+  - ThirdParty/**
+
+build:
+  - ProjectSettings/**
+  - Packages/**
