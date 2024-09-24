@@ -23,8 +23,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - name: size-label
-        uses: "pascalgn/size-label-action@v0.4.3"
+      - uses: "pascalgn/size-label-action@v0.4.3"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
@@ -50,33 +49,28 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const fs = require('fs');
-            const path = require('path');
-
-            function hasUnityChanges(files, directory) {
-              return files.some(file => file.startsWith(directory));
-            }
-
             const { data: changedFiles } = await github.rest.pulls.listFiles({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              ...context.repo,
               pull_number: context.issue.number,
             });
 
             const filePaths = changedFiles.map(file => file.filename);
 
-            const labelsToAdd = [];
+            const labelMap = {
+              'Assets/': 'unity-assets',
+              'ProjectSettings/': 'unity-settings',
+              'Packages/': 'unity-packages',
+              'Assets/Convai/Editor/': 'unity-editor',
+              'Assets/Convai/Plugins/': 'unity-plugins'
+            };
 
-            if (hasUnityChanges(filePaths, 'Assets/')) labelsToAdd.push('unity-assets');
-            if (hasUnityChanges(filePaths, 'ProjectSettings/')) labelsToAdd.push('unity-settings');
-            if (hasUnityChanges(filePaths, 'Packages/')) labelsToAdd.push('unity-packages');
-            if (hasUnityChanges(filePaths, 'Assets/Convai/Editor/')) labelsToAdd.push('unity-editor');
-            if (hasUnityChanges(filePaths, 'Assets/Convai/Plugins/')) labelsToAdd.push('unity-plugins');
+            const labelsToAdd = Object.entries(labelMap)
+              .filter(([dir]) => filePaths.some(file => file.startsWith(dir)))
+              .map(([, label]) => label);
 
             if (labelsToAdd.length > 0) {
               await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                ...context.repo,
                 issue_number: context.issue.number,
                 labels: labelsToAdd
               });
