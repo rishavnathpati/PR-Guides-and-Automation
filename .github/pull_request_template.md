@@ -10,7 +10,7 @@
 [Describe the approach you took to implement these changes]
 
 ### Related Issues
-- Jira Ticket: [UNITY-1507](https://convaixr.atlassian.net/browse/UNITY-1507)
+- Example: Jira Ticket: [UNITY-1507](https://convaixr.atlassian.net/browse/UNITY-1507)
 
 ## Code Checklist
 - [ ] Code follows project style guidelines
